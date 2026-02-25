@@ -79,6 +79,7 @@
         "dmg",
         "zip"
       ],
+      "arch": ["universal"],
       "icon": "build/icon.png",
       "category": "public.app-category.productivity"
     },
