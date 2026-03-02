@@ -2263,7 +2263,7 @@ export const useStore = create<AppState>()(
             return
           }
 
-          ; (globalThis as any).__clawdeskClient = client
+          (globalThis as any).__clawdeskClient = client
           set({ client })
 
           // Fetch initial data

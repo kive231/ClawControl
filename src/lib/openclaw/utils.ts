@@ -70,7 +70,8 @@ function isLikelyBase64(str: string): boolean {
   if (str.length < 20) return false
   // Must not contain characters invalid in base64
   // Shell refs ($, parens, spaces, angle brackets, etc.) are dead giveaways
-  if (/[$()<>{}\[\]!?;|&\\]/.test(str)) return false
+  // Detect common shell/meta characters that indicate the string is not base64
+  if (str.split('').some((ch) => '$()<>[]{}!?;|&\\'.includes(ch))) return false
   // Must not contain spaces (base64 is continuous)
   if (/\s/.test(str.slice(0, 200))) return false
   // Sample first 200 chars — should be exclusively base64 alphabet

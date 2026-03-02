@@ -3,7 +3,8 @@ import { useStore } from '../store'
 
 // Resolve model value — server can return string or { primary, fallbacks }
 function resolveModel(m: unknown): string | undefined {
-  return typeof m === 'string' ? m : (m as any)?.primary || undefined
+  if (typeof m === 'string') return m
+  return (m as { primary?: string } | null)?.primary || undefined
 }
 
 export function AgentDetailView() {
@@ -19,6 +20,11 @@ export function AgentDetailView() {
   const [nameValue, setNameValue] = useState('')
   const [savingName, setSavingName] = useState(false)
   const nameInputRef = useRef<HTMLInputElement>(null)
+
+  // Ensure hooks are called unconditionally — don't place hooks after an early return
+  useEffect(() => {
+    if (editingName) nameInputRef.current?.focus()
+  }, [editingName])
 
   if (!selectedAgentDetail) return null
 
