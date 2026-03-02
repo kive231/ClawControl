@@ -115,10 +115,6 @@ export function AgentDetailView() {
     if (e.key === 'Escape') setEditingName(false)
   }
 
-  useEffect(() => {
-    if (editingName) nameInputRef.current?.focus()
-  }, [editingName])
-
   const getAvatarDisplayValue = () => {
     if (!agent.avatar) return null
     if (agent.avatar.startsWith('data:')) return '(data URI)'
