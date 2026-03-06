@@ -39,10 +39,35 @@ Test & lint output:
 - npm test: All tests passed. 42 tests passed.
 
 Git log (recent):
-$(git_log)
+178855d Add CODE_REVIEW_REPORT.md summarizing fixes
+bd6b11d Fix: call useEffect unconditionally and remove duplicate hook in AgentDetailView
+150b3de Fix: ensure hooks are called unconditionally in AgentDetailView; improve resolveModel typing
+0eff23b wip
+71ba120 Fix cron job RPC params: use jobId and patch object per server schema
+600d993 Move Android WebSocket connect/disconnect off main thread to prevent ANR
+2558d11 Fix mobile WebSocket Origin header to use http/https instead of capacitor://
+9ffef82 Filter base64 image data from streaming, validate image URLs, and suppress agent state JSON
+c2ce494 Support base64 data URLs and fix media route in MEDIA: tokens
+0aed8aa Fix TTS audio playback: CSP, MEDIA streaming, subagent delivery, and expired fallback
+cc16ecd Fix TTS voice messages not playing on desktop/mobile
+bbbbc35 Fix Android IME: swipe-to-type lag, keyboard STT, and composition edge cases
+54b4454 Add in-app review prompt and bump Android versionCode to 7
+9c952c8 Bump version to 1.4.0
+94652e4 Fix message cache infinite recursion and drop heartbeat chat bubbles
+ec0c535 Fix security, reliability, UX, and performance issues across 18 files
+85369d3 Fix reliability, race conditions, and UX: sticky scroll, error boundary, watchdog isolation
+2a762e8 Fix mobile reliability: WebSocket races, stale callbacks, TOFU, gesture cleanup
+d703967 Add server profile tabs, per-profile token storage, and sidebar UI polish
+53ab1f6 Add response watchdog for stale connections and hide heartbeat messages
+
 
 Git diff stat:
-$(git_diff)
+ CODE_REVIEW_REPORT.md              | 49 ++++++++++++++++++++++++++++++++++++++
+ src/components/AgentDetailView.tsx | 12 ++++++----
+ src/lib/openclaw/utils.ts          |  3 ++-
+ src/store/index.ts                 |  2 +-
+ 4 files changed, 59 insertions(+), 7 deletions(-)
+
 
 ---
 
