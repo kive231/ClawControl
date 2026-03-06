@@ -22,6 +22,7 @@ import { UsageView } from './components/UsageView'
 import { NodesView } from './components/NodesView'
 import { AgentDashboard } from './components/AgentDashboard'
 import { MobileGestureLayer } from './components/MobileGestureLayer'
+import Landing from "./marketing/Landing"
 import {
   isNativeMobile,
   getPlatform,
@@ -136,6 +137,8 @@ function App() {
       <Sidebar />
 
       <main className="main-content">
+        {/* Lightweight marketing landing when no server configured */}
+        <Landing />
         <ServerProfileTabs />
         <TopBar />
         <ErrorBoundary>
