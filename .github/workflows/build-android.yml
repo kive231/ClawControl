@@ -57,23 +57,21 @@ jobs:
           fi
           # Create missing xml resources referenced by custom AndroidManifest
           mkdir -p android/app/src/main/res/xml
-          cat > android/app/src/main/res/xml/network_security_config.xml << 'XMLEOF'
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <base-config cleartextTrafficPermitted="true">
-        <trust-anchors>
-            <certificates src="system" />
-        </trust-anchors>
-    </base-config>
-</network-security-config>
-XMLEOF
-          cat > android/app/src/main/res/xml/file_paths.xml << 'XMLEOF'
-<?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <cache-path name="cache" path="." />
-    <files-path name="files" path="." />
-</paths>
-XMLEOF
+          printf '%s\n' '<?xml version="1.0" encoding="utf-8"?>' \
+            '<network-security-config>' \
+            '    <base-config cleartextTrafficPermitted="true">' \
+            '        <trust-anchors>' \
+            '            <certificates src="system" />' \
+            '        </trust-anchors>' \
+            '    </base-config>' \
+            '</network-security-config>' \
+            > android/app/src/main/res/xml/network_security_config.xml
+          printf '%s\n' '<?xml version="1.0" encoding="utf-8"?>' \
+            '<paths>' \
+            '    <cache-path name="cache" path="." />' \
+            '    <files-path name="files" path="." />' \
+            '</paths>' \
+            > android/app/src/main/res/xml/file_paths.xml
           # Patch root build.gradle to add Kotlin plugin
           # (plugin capacitor-native-websocket uses kotlin-android)
           KOTLIN_VERSION="2.0.21"
