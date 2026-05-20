@@ -39,6 +39,9 @@ jobs:
           if [ -d android/app/src/main/java ]; then
             cp -r android/app/src/main/java /tmp/android-backup/app/src/main/
           fi
+          if [ -d android/app/src/main/res ]; then
+            cp -r android/app/src/main/res /tmp/android-backup/app/src/main/
+          fi
           if [ -f android/app/src/main/AndroidManifest.xml ]; then
             cp android/app/src/main/AndroidManifest.xml /tmp/android-backup/app/src/main/
           fi
@@ -52,11 +55,30 @@ jobs:
           if [ -f /tmp/android-backup/app/src/main/AndroidManifest.xml ]; then
             cp /tmp/android-backup/app/src/main/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
           fi
+          # Create missing xml resources referenced by custom AndroidManifest
+          mkdir -p android/app/src/main/res/xml
+          cat > android/app/src/main/res/xml/network_security_config.xml << 'XMLEOF'
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
+XMLEOF
+          cat > android/app/src/main/res/xml/file_paths.xml << 'XMLEOF'
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <cache-path name="cache" path="." />
+    <files-path name="files" path="." />
+</paths>
+XMLEOF
           # Patch root build.gradle to add Kotlin plugin
           # (plugin capacitor-native-websocket uses kotlin-android)
           KOTLIN_VERSION="2.0.21"
           sed -i "/classpath/ a\        classpath \"org.jetbrains.kotlin:kotlin-gradle-plugin:${KOTLIN_VERSION}\"" android/build.gradle
-          # Ensure compileSdkVersion and kotlinVersion are set in gradle.properties
+          # Ensure compileSdkVersion is set in gradle.properties
           if ! grep -q "compileSdkVersion" android/gradle.properties 2>/dev/null; then
             echo "compileSdkVersion=36" >> android/gradle.properties
           fi
