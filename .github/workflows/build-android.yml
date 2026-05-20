@@ -41,8 +41,18 @@ jobs:
       - name: Fix Android edge-to-edge
         run: node scripts/fix-android-edge-to-edge.js
 
+      - name: Install Gradle
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Build APK (Debug)
-        run: cd android && ./gradlew assembleDebug
+        run: |
+          cd android
+          if [ ! -f gradlew ]; then
+            echo "Generating Gradle wrapper..."
+            gradle wrapper --gradle-version=8.9
+          fi
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
