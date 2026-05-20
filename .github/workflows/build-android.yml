@@ -52,6 +52,14 @@ jobs:
           if [ -f /tmp/android-backup/app/src/main/AndroidManifest.xml ]; then
             cp /tmp/android-backup/app/src/main/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
           fi
+          # Patch root build.gradle to add Kotlin plugin
+          # (plugin capacitor-native-websocket uses kotlin-android)
+          KOTLIN_VERSION="2.0.21"
+          sed -i "/classpath/ a\        classpath \"org.jetbrains.kotlin:kotlin-gradle-plugin:${KOTLIN_VERSION}\"" android/build.gradle
+          # Ensure compileSdkVersion and kotlinVersion are set in gradle.properties
+          if ! grep -q "compileSdkVersion" android/gradle.properties 2>/dev/null; then
+            echo "compileSdkVersion=36" >> android/gradle.properties
+          fi
           # Sync
           npx cap sync android
 
