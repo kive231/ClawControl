@@ -32,36 +32,28 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Init Capacitor Android (if needed)
+      - name: Init & Sync Capacitor Android
         run: |
-          if [ ! -f android/build.gradle ]; then
-            echo "Android build files missing, running cap add android..."
-            npx cap add android
-          fi
-
-      - name: Init Capacitor Android (preserve custom source)
-        run: |
-          # Backup custom Android source files before regenerating
-          mkdir -p /tmp/android-backup
+          # Backup custom Android source
+          mkdir -p /tmp/android-backup/app/src/main
           if [ -d android/app/src/main/java ]; then
-            cp -r android/app/src/main/java /tmp/android-backup/
+            cp -r android/app/src/main/java /tmp/android-backup/app/src/main/
           fi
           if [ -f android/app/src/main/AndroidManifest.xml ]; then
-            cp android/app/src/main/AndroidManifest.xml /tmp/android-backup/
+            cp android/app/src/main/AndroidManifest.xml /tmp/android-backup/app/src/main/
           fi
-          # Remove and regenerate full Android project
+          # Remove stale android dir and generate fresh project
           rm -rf android/
           npx cap add android
           # Restore custom source
-          if [ -d /tmp/android-backup/java ]; then
-            cp -r /tmp/android-backup/java/* android/app/src/main/java/
+          if [ -d /tmp/android-backup/app/src/main/java ]; then
+            cp -r /tmp/android-backup/app/src/main/java/* android/app/src/main/java/
           fi
-          if [ -f /tmp/android-backup/AndroidManifest.xml ]; then
-            cp /tmp/android-backup/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+          if [ -f /tmp/android-backup/app/src/main/AndroidManifest.xml ]; then
+            cp /tmp/android-backup/app/src/main/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
           fi
-
-      - name: Sync Capacitor Android
-        run: npx cap sync android
+          # Sync
+          npx cap sync android
 
       - name: Generate assets
         run: npx @capacitor/assets generate --android --splashBackgroundColor "#06080a" --iconBackgroundColor "#06080a"
